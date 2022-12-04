@@ -1,8 +1,9 @@
-:: 언리얼 엔진과 프로젝트 주소를 입력합니다.
+:: 언리얼 엔진과 프로젝트 주소, 저장할 주소를 입력합니다.
 @echo off
 set EngineDirectoryPath=C:\Program Files\Epic Games\UE_4.27\Engine
 set ProjectDictionaryPath=D:\BuildTest
 set ProjectName=BuildTest
+set DefaultStagingDirectoryPath=D:
 @echo on
 
 :: 인수로 사용할 변수를 작성합니다.
@@ -10,22 +11,30 @@ set ProjectName=BuildTest
 set AutomationToolPath=%EngineDirectoryPath%\Binaries\DotNET\AutomationTool.exe
 set UE4ExePath=%EngineDirectoryPath%\Binaries\Win64\UE4Editor-Cmd.exe
 set UProject=%ProjectName%.uproject
+set ConfigPathInBuild=WindowsNoEditor\Engine\Config
+set BaseGameUserSettinginBuild=%ConfigPathInBuild%\BaseGameUserSettings.ini
 @echo on
 
 :Main
-call :RunUAT BuildTest_en "D:\BuildTest\EN"
-pause
+call :RunUAT BuildTest_en
+	@echo off
+	set BaseGameUserSettingPath=%StagingDirectoryPath%\%BaseGameUserSettinginBuild%
+	@echo on
+	:: 마지막 스테이징의 BaseGameuserSetting에 culture를 추가합니다.
+	echo. >> "%BaseGameUserSettingPath%"
+	echo culture=en >> "%BaseGameUserSettingPath%"
+call :RunUAT BuildTest_ko
 goto EOF
 
 :: .uproject를 복사하고 해당 프로젝트를 이용하여 빌드합니다.
 :: UAT를 이용하여 프로젝트를 빌드하고, 해당 위치에 저장합니다.
 :: UAT가 종료되면 Intermediate폴더를 삭제합니다.
-:RunUAT <NewProjectName> <StagingDirectoryPath>
+:RunUAT <NewProjectName>
 @echo off
 set NewProjectName=%~1
 set NewUProject=%~1.uproject
 set NewUProjectpath=%ProjectDictionaryPath%\%NewUProject%
-set StagingDirectoryPath=%~2
+set StagingDirectoryPath=%DefaultStagingDirectoryPath%\%NewProjectName%
 @echo on
 @echo off
 set RunCommand="%AutomationToolPath%" BuildCookRun -project="%NewUProjectpath%"
