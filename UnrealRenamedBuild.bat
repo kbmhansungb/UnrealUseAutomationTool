@@ -40,6 +40,6 @@ set StagingDirectoryPath=%DefaultStagingDirectoryPath%\%NewProjectName%
 set RunCommand="%AutomationToolPath%" BuildCookRun -project="%NewUProjectpath%"
 @echo on
 if not exist %NewUProject% copy %UProject% %NewUProject%
+if exist "Intermediate" rd /s /q "Intermediate"
 %RunCommand% -noP4 -clientconfig=Shipping -serverconfig=Shipping -nocompile -nocompileeditor -installed -ue4exe="%UE4ExePath%" -utf8output -platform=Win64 -targetplatform=Win64 -build -cook -map= -unversionedcookedcontent -compressed -prereqs -stage -package -stagingdirectory=%StagingDirectoryPath% -cmdline=" -Messaging"
 if not "%ProjectName%.uproject" == "%NewUProject%" del %NewUProject%
-if exist "Intermediate" rd /s /q "Intermediate"
