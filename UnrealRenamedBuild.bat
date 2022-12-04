@@ -3,7 +3,6 @@
 set EngineDirectoryPath=C:\Program Files\Epic Games\UE_4.27\Engine
 set ProjectDictionaryPath=D:\BuildTest
 set ProjectName=BuildTest
-set AddCMDLine="-SessionId=34475EA34CEE89957D9E5BBB9D27DEED -SessionOwner='kj' -SessionName='New Profile 3' "
 @echo on
 
 :: 인수로 사용할 변수를 작성합니다.
@@ -22,6 +21,6 @@ goto EOF
 :: UAT가 종료되면 Intermediate폴더를 삭제합니다.
 :RunUAT <SpecificName> <StagingDirectoryPath>
 if not exist %~1 copy %ProjectName%.uproject %~1
-"%AutomationToolPath%" BuildCookRun -project="%ProjectDictionaryPath%\%~1" -noP4 -clientconfig=Shipping -serverconfig=Shipping -nocompile -nocompileeditor -installed -ue4exe="%UE4ExePath%" -utf8output -platform=Win64 -targetplatform=Win64 -build -cook -map= -unversionedcookedcontent -compressed -prereqs -stage -package -stagingdirectory=%~2 -cmdline=" -Messaging" -addcmdline=%AddCMDLine%
+"%AutomationToolPath%" BuildCookRun -project="%ProjectDictionaryPath%\%~1" -noP4 -clientconfig=Shipping -serverconfig=Shipping -nocompile -nocompileeditor -installed -ue4exe="%UE4ExePath%" -utf8output -platform=Win64 -targetplatform=Win64 -build -cook -map= -unversionedcookedcontent -compressed -prereqs -stage -package -stagingdirectory=%~2 -cmdline=" -Messaging"
 if not "%ProjectName%.uproject" == "%~1" del %~1
 if exist "Intermediate" rd /s /q "Intermediate"
